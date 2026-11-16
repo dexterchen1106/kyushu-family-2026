@@ -59,9 +59,9 @@ function updateItem(title, complete) {
 </script>
 
 <template>
-  <section v-for="(group, groupIndex) in groups" :key="group.title" class="content-card"
-    :aria-labelledby="'checklist-group-' + groupIndex">
-    <h2 :id="'checklist-group-' + groupIndex">{{ group.title }}</h2>
+  <section v-for="(group, groupIndex) in groups" :id="'checklist-group-' + groupIndex"
+    :key="group.title" class="content-card" :aria-labelledby="'checklist-heading-' + groupIndex">
+    <h2 :id="'checklist-heading-' + groupIndex">{{ group.title }}</h2>
     <div v-for="(list, listIndex) in group.lists" :key="listIndex" class="checklist-group">
       <h3 v-if="list.title" :id="`checklist-category-${groupIndex}-${listIndex}`">{{ list.title }}</h3>
       <ul class="checklist" :aria-labelledby="list.title ? `checklist-category-${groupIndex}-${listIndex}` : undefined">

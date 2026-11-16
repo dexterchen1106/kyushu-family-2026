@@ -61,7 +61,7 @@ a { color: #315e76; text-underline-offset: .21em; overflow-wrap: anywhere; }
   background: var(--paper);
   box-shadow: 0 6px 24px #3a302820;
 }
-.trip-menu a, .guide-cards a {
+.trip-menu a, .guide-cards a, .section-links a {
   display: flex;
   align-items: center;
   gap: 8px;
@@ -72,9 +72,79 @@ a { color: #315e76; text-underline-offset: .21em; overflow-wrap: anywhere; }
   font-weight: 700;
   text-decoration: none;
 }
-.trip-menu a:hover, .trip-menu a[aria-current], .guide-cards a:hover { background: #f3ede3; }
+.trip-menu a, .guide-cards a, .section-links a, .tabs button, .daily-links button {
+  transition: background-color 160ms ease;
+}
+.trip-menu a:hover, .trip-menu a[aria-current], .guide-cards a:hover,
+.section-links a:hover { background-color: #f3ede3; }
 .guide-cards { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
 .guide-cards a { border: 1px solid var(--border); background: var(--paper); min-height: 56px; }
+.coupon-list { display: grid; gap: 12px; }
+.coupon-card {
+  scroll-margin-top: 92px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--paper);
+  overflow: hidden;
+}
+.coupon-summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 4px 12px;
+  align-items: center;
+  padding: 16px 18px;
+  cursor: pointer;
+  list-style: none;
+}
+.coupon-summary::-webkit-details-marker { display: none; }
+.coupon-summary:hover { background-color: #f3ede3; }
+.coupon-shop { color: var(--brown); font-weight: 800; }
+.coupon-expiry { color: var(--muted); font-size: .9rem; }
+.coupon-toggle { grid-column: 2; grid-row: 1 / span 2; color: var(--brown); font-weight: 700; }
+.coupon-collapse-label { display: none; }
+.coupon-card[open] .coupon-expand-label { display: none; }
+.coupon-card[open] .coupon-collapse-label { display: inline; }
+.coupon-expanded { padding: 4px 18px 18px; }
+.coupon-offer { margin: 8px 0; font-size: 1.15rem; font-weight: 750; }
+.coupon-note { margin: 8px 0; color: var(--muted); }
+.coupon-store-list { margin: 12px 0; padding-inline-start: 1.35em; }
+.coupon-store-list li { margin-bottom: 5px; }
+.coupon-expiry-expanded { margin: 12px 0; }
+.coupon-source {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 52px;
+  padding: 10px 18px;
+  border-radius: 10px;
+  background: var(--brown);
+  color: #fff;
+  font-weight: 750;
+  text-decoration: none;
+}
+.coupon-source:hover { background: #766047; }
+.coupon-source-name { color: var(--muted); font-size: .82rem; }
+.back-to-top {
+  position: fixed;
+  right: max(16px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom));
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 48px;
+  padding: 8px 14px;
+  border: 1px solid #8e7659;
+  border-radius: 999px;
+  background: var(--brown);
+  color: white;
+  box-shadow: 0 3px 12px #3a302830;
+  font-size: .86rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.back-to-top span { font-size: 1.2rem; line-height: 1; }
+.site-updated { margin: 12px 0 0; color: var(--muted); font-size: .78rem; text-align: right; }
 .guide-arrow { margin-inline-start: auto; }
 .tabs button {
   border: 1px solid transparent;
@@ -89,7 +159,7 @@ a { color: #315e76; text-underline-offset: .21em; overflow-wrap: anywhere; }
   line-height: 1.3;
   cursor: pointer;
 }
-.tabs button:hover { border-color: #9b7958; }
+.tabs button:hover { background-color: #e8dfd0; }
 .tabs button[aria-selected="true"] { background: var(--brown); color: white; }
 .tab-date { display: block; font-size: .76rem; font-weight: 600; margin-top: 3px; }
 
@@ -115,7 +185,6 @@ h1 { color: #4d392a; margin: 0; font-size: clamp(1.65rem, 4.4vw, 3rem); line-hei
   font-weight: 700;
   text-decoration: none;
 }
-.section-links a:hover { text-decoration: underline; }
 .content-card {
   --section-ink: var(--brown);
   --section-tint: #f3ede3;
@@ -173,7 +242,7 @@ h2 > span { margin-inline-end: .25em; }
   font-weight: 700;
   cursor: pointer;
 }
-.daily-links button:hover { border-color: var(--section-border); }
+.daily-links button:hover { background-color: #e5edf3; }
 .daily-date { grid-column: 1; color: var(--muted); font-size: .85rem; }
 .daily-arrow { grid-column: 2; grid-row: 1 / span 2; font-size: 1.5rem; }
 .markdown h3 { margin: 24px 0 9px; color: var(--section-ink); font-size: 1.08rem; }
@@ -360,6 +429,14 @@ h2 > span { margin-inline-end: .25em; }
   .shell { width: calc(100% - 28px); }
   .masthead-inner { min-height: 54px; }
   .page-heading { margin-top: 16px; }
+  .back-to-top { right: 12px; bottom: 12px; }
+  .guide-shopping .content-card,
+  .guide-before-trip .content-card {
+    padding: 0;
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
   .table-wrap { overflow: visible; }
   .markdown table, .markdown tbody { display: block; }
   .markdown thead {

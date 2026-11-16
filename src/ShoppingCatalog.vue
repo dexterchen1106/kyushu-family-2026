@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import catalog from '../伴手禮.md?raw'
 
 const photoImports = import.meta.glob('../docs/伴手禮/*.{png,jpg,webp}', {
@@ -40,6 +40,18 @@ const category = ref('')
 const regions = ['福岡', '阿蘇', '由布院', '熊本']
 const storeOptions = [...new Set(products.flatMap(product => product.stores.map(storeGroup)))]
 const categoryOptions = [...new Set(products.map(product => product.category))]
+function categoryTargetId(category) {
+  return `shopping-category-${categoryOptions.indexOf(category)}`
+}
+
+async function jumpToCategory(selectedCategory) {
+  region.value = ''
+  store.value = ''
+  category.value = selectedCategory
+  await nextTick()
+  document.getElementById(categoryTargetId(selectedCategory))?.scrollIntoView({ block: 'start' })
+}
+
 const results = computed(() => products.filter(product =>
   (!category.value || product.category === category.value) &&
   (!region.value || product.regions.includes(region.value)) &&
@@ -83,10 +95,17 @@ function clearFilters() {
       </label>
       <button type="button" :disabled="!region && !store && !category" @click="clearFilters">清除篩選</button>
     </div>
+    <nav class="section-links" aria-label="跳到商品類型">
+      <a v-for="category in categoryOptions" :key="category" :href="'#' + categoryTargetId(category)"
+        @click.prevent="jumpToCategory(category)">
+        {{ category }}
+      </a>
+    </nav>
     <p class="result-count" role="status">共 {{ results.length }} 項商品</p>
     <p v-if="!results.length" class="empty">沒有符合篩選條件的商品。</p>
     <ul v-else class="product-grid" role="list">
-      <li v-for="product in results" :key="product.title" class="product">
+      <li v-for="(product, index) in results" :id="results.findIndex(item => item.category === product.category) === index
+        ? categoryTargetId(product.category) : undefined" :key="product.title" class="product">
         <div v-if="product.photo" class="product-photo">
           <img :src="product.photo" :alt="product.title + '商品照'" loading="lazy" decoding="async">
         </div>
@@ -120,6 +139,7 @@ function clearFilters() {
 
 <style scoped>
 .catalog { margin-bottom: 24px; }
+.catalog > .section-links { margin: 0 0 16px; }
 .filters {
   display: flex;
   flex-wrap: wrap;
@@ -128,6 +148,7 @@ function clearFilters() {
   padding: 16px;
   border: 1px solid var(--border);
   border-radius: 14px;
+  margin-bottom: 16px;
   background: var(--paper);
 }
 .filters label {
@@ -150,6 +171,8 @@ function clearFilters() {
 }
 .filters select { width: 100%; }
 .filters button { background: #f3ede3; cursor: pointer; font-size: .86rem; }
+.filters button:not(:disabled) { transition: background-color 160ms ease; }
+.filters button:hover:not(:disabled) { background-color: #e8dfd0; }
 .filters button:disabled { opacity: .55; cursor: default; }
 .result-count { margin: 12px 0; color: var(--muted); font-size: .9rem; }
 .product-grid {
@@ -168,6 +191,7 @@ function clearFilters() {
   border: 1px solid var(--border);
   border-radius: 14px;
   background: var(--paper);
+  scroll-margin-top: 92px;
 }
 .product-photo {
   height: 215px;

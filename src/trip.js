@@ -180,8 +180,9 @@ function dailySections(source, maps, matchNotes) {
 }
 
 export function parseTrip(source) {
-  const maps = mapLinks(source)
-  const [, ...parts] = source.split(/^# (.+)$/m)
+  const normalizedSource = source.replace(/\r\n?/g, '\n')
+  const maps = mapLinks(normalizedSource)
+  const [, ...parts] = normalizedSource.split(/^# (.+)$/m)
   const days = []
   const overview = []
   for (let index = 0; index < parts.length; index += 2) {
