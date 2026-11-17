@@ -2,7 +2,7 @@
 import { computed, nextTick, ref } from 'vue'
 import catalog from '../伴手禮.md?raw'
 
-const photoImports = import.meta.glob('../docs/伴手禮/*.{png,jpg,webp}', {
+const photoImports = import.meta.glob('../docs/伴手禮/*.{png,jpg,webp,avif}', {
   eager: true, import: 'default', query: '?url',
 })
 // macOS and Git can store the same Japanese filename with different Unicode forms.
@@ -96,10 +96,12 @@ function clearFilters() {
       <button type="button" :disabled="!region && !store && !category" @click="clearFilters">清除篩選</button>
     </div>
     <nav class="section-links" aria-label="跳到商品類型">
-      <a v-for="category in categoryOptions" :key="category" :href="'#' + categoryTargetId(category)"
-        @click.prevent="jumpToCategory(category)">
-        {{ category }}
+      <a v-for="option in categoryOptions" :key="option" :href="'#' + categoryTargetId(option)"
+        :aria-current="category === option ? 'true' : undefined"
+        @click.prevent="jumpToCategory(option)">
+        {{ option }}
       </a>
+      <button v-if="category" type="button" @click="clearFilters">顯示全部商品</button>
     </nav>
     <p class="result-count" role="status">共 {{ results.length }} 項商品</p>
     <p v-if="!results.length" class="empty">沒有符合篩選條件的商品。</p>
@@ -140,6 +142,19 @@ function clearFilters() {
 <style scoped>
 .catalog { margin-bottom: 24px; }
 .catalog > .section-links { margin: 0 0 16px; }
+.section-links a[aria-current="true"] { background: #e8dfd0; box-shadow: inset 0 0 0 1px #c8b9a4; }
+.section-links button {
+  min-height: 44px;
+  padding: 8px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--paper);
+  color: var(--brown);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.section-links button:hover { background-color: #f3ede3; }
 .filters {
   display: flex;
   flex-wrap: wrap;

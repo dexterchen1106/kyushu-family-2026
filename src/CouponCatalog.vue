@@ -6,7 +6,7 @@ const coupons = [
     expires: '官方券頁未標截止日；以即時頁面為準',
     offer: '含稅消費滿 ¥11,000 折 5%，滿 ¥33,000 折 7%。',
     note: '請在結帳時開啟券頁出示動態條碼；截圖不可使用。免稅退稅可併用。',
-    url: 'https://livejapan.com/public/operation/coupon/donki/ja.html',
+    url: 'https://japanportal.donki-global.com/coupon/cp001_zhtw.html',
     source: 'LIVE JAPAN 唐吉訶德優惠券',
   },
   {
@@ -15,7 +15,7 @@ const coupons = [
     expires: '2027/04/30',
     offer: '依商品類別享最高 7% OFF；適用商品與條件請查看券頁。',
     note: '限符合免稅購物資格的旅客，優惠後消費需滿 ¥5,000；部分商品不適用。',
-    url: 'https://livejapan.com/public/operation/coupon/biccamera/ja.html',
+    url: 'https://rimage.gnst.jp/livejapan.com/public/operation/coupon/assets/image/summary-biccamera-coupon-en.png?20261027',
     source: 'LIVE JAPAN BicCamera 優惠券',
   },
   {
@@ -33,8 +33,8 @@ const coupons = [
     expires: '2027/12/31',
     offer: '含稅消費滿 ¥10,000 折 3%，滿 ¥30,000 折 5%，滿 ¥50,000 折 7%。',
     note: '券頁上的條碼是結帳用折扣券條碼，請於付款前開啟即時頁面給店員掃描；免稅／退稅依資格與店鋪辦理，不可與其他優惠合併。',
-    url: 'https://livejapan.com/public/operation/coupon/tsuruhadrug/ja.html',
-    source: 'LIVE JAPAN 鶴羽藥妝優惠券（更新日：2026/09/02）；CUBE 官方活動頁列示效期至 2027/12/31',
+    url: 'https://livejapan.com/public/operation/coupon/assets/image/tsuruhacoupon_en.PNG',
+    source: 'LIVE JAPAN 鶴羽藥妝優惠券',
   },
   {
     id: 'matsukiyo',
@@ -104,7 +104,6 @@ const coupons = [
         <ul v-if="coupon.stores" class="coupon-store-list" aria-label="活動合作店家">
           <li v-for="store in coupon.stores" :key="store">{{ store }}</li>
         </ul>
-        <p v-else-if="coupon.url" class="coupon-note">未找到可確認於旅程期間使用的優惠券。</p>
         <p class="coupon-expiry coupon-expiry-expanded">效期：{{ coupon.expires }}</p>
         <a v-if="coupon.url" class="coupon-source" :href="coupon.url" target="_blank" rel="noopener noreferrer">
           開啟優惠券／官方資訊頁
